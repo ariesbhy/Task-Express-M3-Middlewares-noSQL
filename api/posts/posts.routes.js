@@ -5,7 +5,7 @@ const {
   deletePost,
   updatePost,
 } = require("./posts.controllers");
-const upload = require("../../middleware/multer");
+const upload = require("../../multer");
 const postrouter = express.Router();
 
 postrouter.get("/posts", getPosts);
