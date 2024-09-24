@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 const connectDB = async () => {
-  const conn = await mongoose.connect("YOUR_CONNECTION_STRING");
-  console.log(`mongo connected: ${conn.connection.host}`);
+  try {
+    const connection = await mongoose.connect(process.env.URL);
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = connectDB;

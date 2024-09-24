@@ -1,17 +1,18 @@
-const express = require('express');
-const router = express.Router();
+const express = require("express");
 const {
-  postsGet,
-  postsUpdate,
-  postsDelete,
-  postsCreate,
-} = require('./posts.controllers');
+  getPosts,
+  createPost,
+  deletePost,
+  updatePost,
+} = require("./posts.controllers");
+const upload = require("../../middleware/multer");
+const postrouter = express.Router();
 
-router.get('/', postsGet);
-router.post('/', postsCreate);
+postrouter.get("/posts", getPosts);
+postrouter.post("/post", upload.single("image"), createPost);
 
-router.delete('/:postId', postsDelete);
+postrouter.delete("/post/:postId", deletePost);
 
-router.put('/:postId', postsUpdate);
+postrouter.put("/post/:postId", updatePost);
 
-module.exports = router;
+module.exports = postrouter;

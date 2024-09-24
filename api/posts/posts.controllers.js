@@ -1,49 +1,63 @@
-const Post = require("../../models/Post");
+const PostSchema = require("../../models/PostSchema");
+const Post = require("../../models/PostSchema");
+let posts = require("../../models/PostsSchema");
 
-exports.postsCreate = async (req, res) => {
+const createPost = async (req, res, next) => {
   try {
-    const newPost = await Post.create(req.body);
-    res.status(201).json(newPost);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-exports.postsDelete = async (req, res) => {
-  const { postId } = req.params;
-  try {
-    const foundPost = await Post.findById(postId);
-    if (foundPost) {
-      await foundPost.deleteOne();
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: "post not found" });
+    const id = posts[posts.lenght - 1].id + 1;
+    const postInfo = req.body;
+    console.log(req.file);
+    if (req.file) {
+      req.body.image = req.file.path;
     }
+    const newPost = await PostSchema.create(postInfo);
+    return res.status(201).json({ data: newPost });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    next(error);
   }
 };
 
-exports.postsUpdate = async (req, res) => {
-  const { postId } = req.params;
+const deletePost = async (req, res, next) => {
   try {
-    const foundPost = await Post.findById(postId);
-    if (foundPost) {
-      await foundPost.updateOne(req.body);
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: "post not found" });
+    const { postId } = req.params;
+    const deletedPost = await PostSchema.findByIdAndDelete(postId);
+    return res.status(200).json({ data: deletedPost });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const updatePost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const updatedPost = await PostSchema.findByIdAndUpdate(postId, req.body);
+
+    const updatedPost2 = await PostSchema.findById(postId);
+    if (!updatePosts) {
+      return res.status(404).json({ error: "Post doesn't exists" });
     }
+    return res.status(200).json({ data: updatedPost2 });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    next(error);
   }
 };
 
-exports.postsGet = async (req, res) => {
+const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find();
-    res.json(posts);
+    const posts = await PostSchema.find();
+    res.status(200).json({ data: posts });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    next(error);
   }
+};
+
+module.exports = {
+  createPost,
+  deletePost,
+  updatePost,
+  getPosts,
 };
