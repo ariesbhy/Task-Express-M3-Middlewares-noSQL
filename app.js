@@ -2,7 +2,7 @@
 let posts = require("./data");
 const express = require("express");
 const app = express();
-const postsRoutes = require("./api/posts/posts.routes");
+const postRouter = require("./api/posts/posts.routes");
 const connectDb = require("./database");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
@@ -36,7 +36,7 @@ console.log(path.join(__dirname, "media"));
 // GET api/posts
 
 //routes
-app.use("/api/posts", postsRoutes);
+app.use("/api/posts", postRouter);
 
 //middleware
 app.use(notFoundHandler);

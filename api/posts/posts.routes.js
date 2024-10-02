@@ -6,13 +6,13 @@ const {
   updatePost,
 } = require("./posts.controllers");
 const upload = require("../../multer");
-const postrouter = express.Router();
+const postRouter = express.Router();
 
-postrouter.get("/posts", getPosts);
-postrouter.post("/post", upload.single("image"), createPost);
+postRouter.get("/posts", getPosts);
+postRouter.post("/post", upload.single("image"), createPost);
 
-postrouter.delete("/post/:postId", deletePost);
+postRouter.delete("/post/:postId", deletePost);
 
-postrouter.put("/post/:postId", updatePost);
+postRouter.put("/post/:postId", updatePost);
 
-module.exports = postrouter;
+module.exports = postRouter;
